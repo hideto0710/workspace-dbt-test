@@ -7,5 +7,5 @@ see [microsoft/vscode-remote-release#5388](https://github.com/microsoft/vscode-r
 ## Testing
 
 ```bash
-dbt test
+dbt test --vars "{\"apply_filter\": \"date = DATE '2021-01-03'\"}"
 ```

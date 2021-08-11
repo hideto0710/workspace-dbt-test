@@ -62,23 +62,30 @@ sources:
           - dbt_expectations.expect_table_row_count_to_be_between:
               min_value: 0
               strictly: true
+              where: "{{ var('apply_filter') }}"
         columns:
           - name: id
             tests:
-              - unique
-              - not_null
+              - unique:
+                  where: "{{ var('apply_filter') }}"
+              - not_null:
+                  where: "{{ var('apply_filter') }}"
               - valid_format:
                   value: uuid
+                  where: "{{ var('apply_filter') }}"
           - name: feepct
             tests:
               - dbt_utils.expression_is_true:
                   expression: "~* '^\\-?\\d+([\\.,]\\d+)? ?%$'"
+                  where: "{{ var('apply_filter') }}"
           - name: size
             tests:
               - dbt_utils.accepted_range:
                   max_value: 10000
                   inclusive: false
+                  where: "{{ var('apply_filter') }}"
           - name: country
             tests:
               - accepted_values:
                   values: ["Netherlands", "Spain", "UK", "US"]
+                  where: "{{ var('apply_filter') }}"

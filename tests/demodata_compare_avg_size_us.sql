@@ -3,6 +3,7 @@ with validation as (
         avg(size) as avg_size,
         avg(case when country = 'US' then size end) as avg_size_us
     from demodata
+    where {{ var('apply_filter') }}
 ),
 
 validation_errors as (
