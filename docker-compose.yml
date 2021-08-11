@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+  console:
+    build: ./.devcontainer
+    # see https://code.visualstudio.com/docs/remote/devcontainerjson-reference#_devcontainerjson-properties `overrideCommand`
+    command: /bin/sh -c "while sleep 1000; do :; done"
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      DBT_PROFILES_DIR: /workspace
+    volumes: 
+      - .:/workspace:cached
+  # see  https://docs.soda.io/soda-sql/5_min_tutorial.html#create-a-sample-warehouse-optional
+  db:
+    image: postgres:9.6.17-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_HOST_AUTH_METHOD: trust
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql/csv

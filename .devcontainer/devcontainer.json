@@ -1,0 +1,8 @@
+{
+    "name": "dbt Workspace",
+    "dockerComposeFile": "../docker-compose.yml",
+    "workspaceFolder": "/workspace",
+    "service": "console",
+    "remoteUser": "vscode",
+    "postCreateCommand": "dbt deps"
+}

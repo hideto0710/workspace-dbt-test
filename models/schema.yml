@@ -1,0 +1,84 @@
+
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: raw_customers
+        tests:
+          - dbt_expectations.expect_table_row_count_to_be_between:
+              min_value: 0
+              strictly: true
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+
+      - name: raw_orders
+        tests:
+          - dbt_expectations.expect_table_row_count_to_be_between:
+              min_value: 0
+              strictly: true
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: user_id
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('raw_customers')
+                  field: id
+          - name: status
+            tests:
+              - accepted_values:
+                  values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
+
+      - name: raw_payments
+        tests:
+          - dbt_expectations.expect_table_row_count_to_be_between:
+              min_value: 0
+              strictly: true
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+          - name: order_id
+            tests:
+              - not_null
+              - relationships:
+                  to: ref('raw_orders')
+                  field: id
+          - name: payment_method
+            tests:
+              - accepted_values:
+                  values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']
+
+      - name: demodata
+        tests:
+          - dbt_expectations.expect_table_row_count_to_be_between:
+              min_value: 0
+              strictly: true
+        columns:
+          - name: id
+            tests:
+              - unique
+              - not_null
+              - valid_format:
+                  value: uuid
+          - name: feepct
+            tests:
+              - valid_format:
+                  value: number_percentage
+          - name: size
+            tests:
+              - dbt_utils.accepted_range:
+                  max_value: 10000
+                  inclusive: false
+          - name: country
+            tests:
+              - accepted_values:
+                  values: ["Netherlands", "Spain", "UK", "US"]
