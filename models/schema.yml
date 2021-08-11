@@ -71,8 +71,8 @@ sources:
                   value: uuid
           - name: feepct
             tests:
-              - valid_format:
-                  value: number_percentage
+              - dbt_utils.expression_is_true:
+                  expression: "~* '^\\-?\\d+([\\.,]\\d+)? ?%$'"
           - name: size
             tests:
               - dbt_utils.accepted_range:
